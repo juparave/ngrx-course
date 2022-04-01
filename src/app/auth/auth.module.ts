@@ -22,7 +22,8 @@ import { AuthGuard } from './auth.guard';
         MatInputModule,
         MatButtonModule,
         RouterModule.forChild([{path: '', component: LoginComponent}]),
-        StoreModule.forFeature('auth', fromAuth.authReducer)
+        StoreModule.forFeature('auth', fromAuth.authReducer),
+        EffectsModule.forFeature([])
 
     ],
     declarations: [LoginComponent],
