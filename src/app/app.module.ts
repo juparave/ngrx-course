@@ -26,6 +26,7 @@ import { metaReducers, reducers } from './reducers';
 const routes: Routes = [
   {
     path: 'courses',
+    // CoursesModule is lazy loaded
     loadChildren: () => import('./courses/courses.module').then(m => m.CoursesModule)
   },
   {
@@ -51,6 +52,7 @@ const routes: Routes = [
     MatProgressSpinnerModule,
     MatListModule,
     MatToolbarModule,
+    // Authmodule is eagerly loaded
     AuthModule.forRoot(),
     StoreModule.forRoot(reducers, { metaReducers }),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
