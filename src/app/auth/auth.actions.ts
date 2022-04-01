@@ -14,4 +14,5 @@ export const login = createAction(
 
 export const logout = createAction(
   "[Top Menu] Logout"
+  // logout action does not have a payload
 );
