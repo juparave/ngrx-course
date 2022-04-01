@@ -3,6 +3,7 @@ import { select, Store } from "@ngrx/store";
 import { Observable } from "rxjs";
 import { map } from 'rxjs/operators';
 import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
+import { AppState } from './reducers';
 
 @Component({
   selector: 'app-root',
@@ -11,37 +12,50 @@ import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Rout
 })
 export class AppComponent implements OnInit {
 
-    loading = true;
+  loading = true;
 
-    constructor(private router: Router) {
+  isLoggedIn$: Observable<boolean>;
+  isLoggedOut$: Observable<boolean>;
 
-    }
+  constructor(private router: Router, private store: Store<AppState>) {
 
-    ngOnInit() {
+  }
 
-      this.router.events.subscribe(event  => {
-        switch (true) {
-          case event instanceof NavigationStart: {
-            this.loading = true;
-            break;
-          }
+  ngOnInit() {
 
-          case event instanceof NavigationEnd:
-          case event instanceof NavigationCancel:
-          case event instanceof NavigationError: {
-            this.loading = false;
-            break;
-          }
-          default: {
-            break;
-          }
+    this.router.events.subscribe(event  => {
+      switch (true) {
+        case event instanceof NavigationStart: {
+          this.loading = true;
+          break;
         }
-      });
 
-    }
+        case event instanceof NavigationEnd:
+        case event instanceof NavigationCancel:
+        case event instanceof NavigationError: {
+          this.loading = false;
+          break;
+        }
+        default: {
+          break;
+        }
+      }
+    });
 
-    logout() {
+    this.isLoggedIn$ = this.store.pipe(
+      // if there is a user profile, the expression is true
+      map(state => !!state["auth"].user)
+    );
 
-    }
+    this.isLoggedOut$ = this.store.pipe(
+      // if there is a user profile, the expression is false
+      map(state => !state["auth"].user)
+    );
+
+  }
+
+  logout() {
+
+  }
 
 }
