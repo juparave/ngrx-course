@@ -44,12 +44,14 @@ export class AppComponent implements OnInit {
 
     this.isLoggedIn$ = this.store.pipe(
       // if there is a user profile, the expression is true
-      map(state => !!state["auth"].user)
+      // select operator from NgRx, remove duplicate values and prevent them
+      // reach the view each time
+      select(state => !!state["auth"].user),
     );
 
     this.isLoggedOut$ = this.store.pipe(
       // if there is a user profile, the expression is false
-      map(state => !state["auth"].user)
+      select(state => !state["auth"].user)
     );
 
   }
