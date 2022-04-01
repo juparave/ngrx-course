@@ -8,8 +8,8 @@ export const selectAuthState =
 
 // memoize function
 export const isLoggedIn = createSelector(
-    state => state["auth"],
-    (auth) => !!auth.user
+    selectAuthState,
+    auth => !!auth.user
 );
 
 
