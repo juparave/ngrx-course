@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import { map } from 'rxjs/operators';
 import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
 import { AppState } from './reducers';
+import { isLoggedIn, isLoggedOut } from './auth/auth.selectors';
 
 @Component({
   selector: 'app-root',
@@ -43,15 +44,11 @@ export class AppComponent implements OnInit {
     });
 
     this.isLoggedIn$ = this.store.pipe(
-      // if there is a user profile, the expression is true
-      // select operator from NgRx, remove duplicate values and prevent them
-      // reach the view each time
-      select(state => !!state["auth"].user),
+      select(isLoggedIn),
     );
 
     this.isLoggedOut$ = this.store.pipe(
-      // if there is a user profile, the expression is false
-      select(state => !state["auth"].user)
+      select(isLoggedOut)
     );
 
   }
