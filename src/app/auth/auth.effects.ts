@@ -8,21 +8,15 @@ import { Router } from '@angular/router';
 @Injectable()
 export class AuthEffects {
 
+    login$ = createEffect(() => this.actions$.pipe(
+        // using NgRx `ofType` operator to filter action
+        ofType(AuthActions.login),
+        tap(action => localStorage.setItem('user', JSON.stringify(action.user))
+        )),
+        {dispatch: false});
+
     constructor(private actions$: Actions,
         private router: Router) {
-
-        const login$ = this.actions$.pipe(
-            // using NgRx `ofType` operator to filter action
-            ofType(AuthActions.login),
-            tap(action => {
-
-                // now we can use typesafe to call user object
-                localStorage.setItem('user', JSON.stringify(action.user));
-
-            })
-        );
-
-        login$.subscribe();
 
     }
 
