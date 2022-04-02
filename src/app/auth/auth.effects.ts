@@ -15,6 +15,14 @@ export class AuthEffects {
         )),
         {dispatch: false});
 
+    logout$ = createEffect(() => this.actions$.pipe(
+        ofType(AuthActions.logout),
+        tap(action => {
+            localStorage.removeItem('user');
+            this.router.navigateByUrl('/login');
+        })), 
+        {dispatch: false});
+
     constructor(private actions$: Actions,
         private router: Router) {
 
