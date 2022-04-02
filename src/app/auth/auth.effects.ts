@@ -11,11 +11,19 @@ export class AuthEffects {
     constructor(private actions$: Actions,
         private router: Router) {
 
-        actions$.subscribe(action => {
-            if (action.type == '[Login Page] User Login') {
-                localStorage.setItem('user', JSON.stringify(action["user"]));
-            }
-        });
+        const login$ = this.actions$.pipe(
+            // using NgRx `ofType` operator to filter action
+            ofType(AuthActions.login),
+            tap(action => {
+
+                // now we can use typesafe to call user object
+                localStorage.setItem('user', JSON.stringify(action.user));
+
+            })
+        );
+
+        login$.subscribe();
+
     }
 
 
