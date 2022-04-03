@@ -13,22 +13,28 @@ export interface AppState {
 }
 
 export const reducers: ActionReducerMap<AppState> = {
-    router: routerReducer
+  router: routerReducer
 };
 
+// example of metareducer
 export function logger(reducer:ActionReducer<any>)
-    : ActionReducer<any> {
+  : ActionReducer<any> {
     return (state, action) => {
-        console.log("state before: ", state);
-        console.log("action", action);
 
-        return reducer(state, action);
+      // just print to the console the current state and action
+      console.log("state before: ", state);
+      console.log("action", action);
+
+      // continue reducer chain
+      return reducer(state, action);
     }
 
-}
+  }
 
 
 export const metaReducers: MetaReducer<AppState>[] =
-    !environment.production ? [logger] : [];
+  // metareducers are going to executed in the order of the array
+  // in this case only `logger` metareducer is executed
+  !environment.production ? [logger] : [];
 
 
