@@ -17,6 +17,18 @@ export class CoursesEffects {
     )
   );
 
+  saveCourse$ = createEffect(
+    () => this.actions$
+    .pipe(
+      ofType(CourseActions.courseUpdated),
+      concatMap(action => this.coursesHttpService.saveCourse(
+        action.update.id,
+        action.update.changes))
+    ),
+    // we are not dispatching a new action
+    {dispatch: false}
+  );
+
   constructor(private actions$: Actions,
     private coursesHttpService: CoursesHttpService) {
 
