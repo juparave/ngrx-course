@@ -51,7 +51,12 @@ export const coursesRoutes: Routes = [
 
 const entityMetaData: EntityMetadataMap = {
   Course: {
-    sortComparer: compareCourses
+    sortComparer: compareCourses,
+    entityDispatcherOptions: {
+      // don't wait for the backend to comlete update
+      // just update local data store
+      optimisticUpdate: true
+    }
   }
 }
 
