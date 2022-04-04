@@ -6,6 +6,7 @@ import { Course, compareCourses } from "../model/course";
 
 // using EntityState 
 export interface CourseState extends EntityState<Course> {
+  allCoursesLoaded: boolean
 }
 
 // using NgRx EntityAdapter
@@ -18,13 +19,19 @@ export const adapter = createEntityAdapter<Course>({
   // selectId: course => course.id
 });
 
-export const initialCoursesState = adapter.getInitialState();
+export const initialCoursesState = adapter.getInitialState ({
+  allCoursesLoaded: false
+});
 
 export const coursesReducer = createReducer(
   initialCoursesState,
 
   on(CourseActions.allCoursesLoaded,
-    (state, action) => adapter.addAll(action.courses, state))
+    (state, action) => adapter.addAll(
+      action.courses,
+      // update allCoursesLoaded flag
+      {...state, allCoursesLoaded: true}
+    ))
 )
 
 export const {selectAll} = adapter.getSelectors();

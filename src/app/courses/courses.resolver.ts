@@ -1,10 +1,11 @@
 import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from "@angular/router";
-import { Store } from "@ngrx/store";
+import { select, Store } from "@ngrx/store";
 import { Observable } from "rxjs";
-import { finalize, first, tap } from "rxjs/operators";
+import { filter, finalize, first, tap } from "rxjs/operators";
 import { AppState } from "../reducers";
 import { loadAllCourses } from "./course.actions";
+import { areCoursesLoaded } from "./courses.selecters";
 
 
 @Injectable()
@@ -21,14 +22,20 @@ export class CoursesResolver implements Resolve<any> {
 
     return this.store
       .pipe(
-        tap(() => {
+        // only if courses are not loaded
+        select(areCoursesLoaded),
+        // this value comes from the selector
+        tap(coursesLoaded => {
 
-          if(!this.loading) {
+          if (!this.loading && !coursesLoaded) {
             this.loading = true;
             this.store.dispatch(loadAllCourses());
           }
 
         }),
+        // this observable is going to be terminated only
+        // if `coursesLoaded` flag is set to true
+        filter(coursesLoaded => coursesLoaded),
         // to ensure observable completion we use first operator
         first(),
         finalize(() => this.loading = false)
