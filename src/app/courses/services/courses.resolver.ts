@@ -15,11 +15,24 @@ export class CoursesResolver implements Resolve<boolean> {
     resolve(route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): Observable<boolean> {
 
-        return this.coursesService.getAll()
+            // using entity-service `loaded` flag to load only when
+            // we dont have data already loaded
+            return this.coursesService.loaded$
             .pipe(
-                map(courses => !!courses)
+                tap(loaded => {
+                    if (!loaded) {
+                        this.coursesService.getAll();
+                    }
+                }),
+                // only true values, be sure that the data is loaded before
+                // comlete the transition
+                filter(loaded => !!loaded),
+                // make sure to complete the observable as the first value is emmited
+                first()
+
             );
 
-    }
+
+        }
 
 }
