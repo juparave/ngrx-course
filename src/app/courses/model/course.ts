@@ -13,8 +13,6 @@ export interface Course {
 }
 
 
-// convenience function to compare courses by 
-// a custom sequential number
 export function compareCourses(c1:Course, c2: Course) {
 
   const compare = c1.seqNo - c2.seqNo;

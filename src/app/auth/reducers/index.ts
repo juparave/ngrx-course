@@ -5,8 +5,8 @@ import {
     createSelector,
     MetaReducer, on
 } from '@ngrx/store';
-import { User } from '../model/user.model';
-import { AuthActions } from '../action-types';
+import {User} from '../model/user.model';
+import {AuthActions} from '../action-types';
 
 
 
@@ -16,7 +16,7 @@ export interface AuthState {
 
 export const initialAuthState: AuthState = {
     user: undefined
-}
+};
 
 export const authReducer = createReducer(
 
@@ -33,5 +33,8 @@ export const authReducer = createReducer(
             user: undefined
         }
     })
-    
+
+
+
 );
+
